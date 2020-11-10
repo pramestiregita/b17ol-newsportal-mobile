@@ -1,5 +1,7 @@
 import React from 'react';
-import {View, Text, Image, ScrollView} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import {View, Image, ScrollView} from 'react-native';
+import {Text} from 'native-base';
 
 import styled from './style';
 
@@ -9,6 +11,16 @@ export default function NewsDetail() {
       <ScrollView>
         <View>
           <Text style={styled.title}>Title</Text>
+        </View>
+        <View style={styled.subTitle}>
+          <View style={styled.items}>
+            <Icon style={styled.icon} name="user" />
+            <Text note>Author</Text>
+          </View>
+          <View style={styled.items}>
+            <Icon style={styled.icon} name="clock" />
+            <Text note>date</Text>
+          </View>
         </View>
         <Image
           style={styled.image}

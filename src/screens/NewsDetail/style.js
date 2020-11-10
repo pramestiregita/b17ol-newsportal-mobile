@@ -18,4 +18,19 @@ export default StyleSheet.create({
   content: {
     padding: 10,
   },
+  subTitle: {
+    flexDirection: 'row',
+    marginHorizontal: 10,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 5,
+  },
+  items: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    marginRight: 5,
+    color: 'grey',
+  },
 });
