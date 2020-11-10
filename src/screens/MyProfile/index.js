@@ -1,6 +1,6 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {Text, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {H3, Left, List, ListItem, Right, Thumbnail} from 'native-base';
 
 import styled from './style';
@@ -16,6 +16,9 @@ export default function MyProfile() {
           <H3 style={styled.profileName}>Name</H3>
           <Text style={styled.profileEmail}>Email</Text>
         </View>
+        <TouchableOpacity>
+          <Icon name="user-edit" size={15} />
+        </TouchableOpacity>
       </View>
       <View style={styled.listWrapper}>
         <List>
@@ -24,7 +27,7 @@ export default function MyProfile() {
             button
             first>
             <Left style={styled.listLeft}>
-              <Text style={styled.listTitle}>Settings</Text>
+              <Text style={styled.listTitle}>Change Password</Text>
             </Left>
             <Right>
               <Icon style={styled.listIcon} name="chevron-right" />

@@ -6,8 +6,9 @@ import React from 'react';
 // import Home from '../Home';
 // import NewsDetail from '../NewsDetail';
 // import MyPost from '../MyPost';
-import MyProfile from '../MyProfile';
+// import MyProfile from '../MyProfile';
+import ChangePassword from '../ChangePassword';
 
 export default function Main() {
-  return <MyProfile />;
+  return <ChangePassword />;
 }
