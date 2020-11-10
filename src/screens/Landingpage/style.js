@@ -6,7 +6,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#2a363b',
-    paddingHorizontal: 100,
+    paddingHorizontal: 50,
   },
   logo: {
     flex: 1,
@@ -15,7 +15,7 @@ export default StyleSheet.create({
   },
   btnWrapper: {
     flex: 1,
-    width: 250,
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
