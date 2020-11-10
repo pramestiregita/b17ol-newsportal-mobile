@@ -17,7 +17,7 @@ const LoginSchema = Yup.object().shape({
     .min(8, 'Password min. 8 character'),
 });
 
-export default function MyReactNativeForm() {
+export default function Login() {
   return (
     <View style={styled.parent}>
       <Image style={styled.logo} source={logo} />
