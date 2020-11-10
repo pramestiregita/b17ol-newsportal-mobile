@@ -5,8 +5,9 @@ import React from 'react';
 // import Signup from '../Signup';
 // import Home from '../Home';
 // import NewsDetail from '../NewsDetail';
-import MyPost from '../MyPost';
+// import MyPost from '../MyPost';
+import MyProfile from '../MyProfile';
 
 export default function Main() {
-  return <MyPost />;
+  return <MyProfile />;
 }
