@@ -4,8 +4,9 @@ import React from 'react';
 // import Login from '../Login';
 // import Signup from '../Signup';
 // import Home from '../Home';
-import NewsDetail from '../NewsDetail';
+// import NewsDetail from '../NewsDetail';
+import MyPost from '../MyPost';
 
 export default function Main() {
-  return <NewsDetail />;
+  return <MyPost />;
 }
