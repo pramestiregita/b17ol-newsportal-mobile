@@ -7,8 +7,9 @@ import React from 'react';
 // import NewsDetail from '../NewsDetail';
 // import MyPost from '../MyPost';
 // import MyProfile from '../MyProfile';
-import ChangePassword from '../ChangePassword';
+// import ChangePassword from '../ChangePassword';
+import ChangeProfile from '../ChangeProfile';
 
 export default function Main() {
-  return <ChangePassword />;
+  return <ChangeProfile />;
 }
