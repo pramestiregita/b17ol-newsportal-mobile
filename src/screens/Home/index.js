@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {View, Image, ScrollView, TouchableOpacity} from 'react-native';
+import {View, Image, TouchableOpacity, FlatList} from 'react-native';
 import {
   Card,
   CardItem,
@@ -15,15 +15,25 @@ import {
   Toast,
 } from 'native-base';
 import {Formik} from 'formik';
+import moment from 'moment';
+import {API_URL} from '@env';
+
 import styled from './style';
+import newsAction from '../../redux/actions/news';
 
 export default function MyPost({navigation}) {
-  const [sort, setSort] = useState(1);
-  const {alertMsg} = useSelector((state) => state.auth);
+  const [sort, setSort] = useState('desc');
+  const {alertMsg, token} = useSelector((state) => state.auth);
+  const {data, pageInfo} = useSelector((state) => state.news);
+  const dispatch = useDispatch();
+
+  const getData = async () => {
+    await dispatch(newsAction.getAll(token));
+  };
 
   useEffect(() => {
-    console.log(sort);
-  }, [sort]);
+    getData();
+  }, []);
 
   useEffect(() => {
     if (alertMsg !== '') {
@@ -39,6 +49,37 @@ export default function MyPost({navigation}) {
     }
   }, [alertMsg]);
 
+  const renderItem = ({item}) => {
+    return (
+      <TouchableOpacity
+        onPress={() => navigation.navigate('NewsDetail', {id: item.id})}
+        key={item.id}
+        style={styled.cardWrapper}>
+        <Card>
+          <CardItem>
+            <Left>
+              <Thumbnail
+                source={{
+                  uri: 'https://via.placeholder.com/150.png?text=Newsportal',
+                }}
+              />
+              <Body>
+                <Text style={styled.title}>{item.title}</Text>
+                <Text note>{moment(item.createdAt).format('MMM DD, YY')}</Text>
+              </Body>
+            </Left>
+          </CardItem>
+          <CardItem cardBody>
+            <Image
+              source={{uri: API_URL.concat(item.picture.image)}}
+              style={styled.image}
+            />
+          </CardItem>
+        </Card>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styled.parent}>
       <View style={styled.adv}>
@@ -47,7 +88,7 @@ export default function MyPost({navigation}) {
             <Formik
               initialValues={{search: ''}}
               onSubmit={(values) =>
-                values.search !== '' && console.log(values)
+                dispatch(newsAction.search(token, values.search))
               }>
               {({handleChange, handleBlur, handleSubmit, values}) => (
                 <Item style={styled.inputWrapper}>
@@ -72,52 +113,17 @@ export default function MyPost({navigation}) {
             mode="dropdown"
             style={styled.sort}
             selectedValue={sort}
-            onValueChange={(itemValue) => setSort(itemValue)}>
-            <Picker.Item label="Newest" value={1} />
-            <Picker.Item label="Oldest" value={2} />
+            onValueChange={(itemValue) => {
+              setSort(itemValue);
+              dispatch(newsAction.sort(token, itemValue));
+            }}>
+            <Picker.Item label="Newest" value={'desc'} />
+            <Picker.Item label="Oldest" value={'asc'} />
           </Picker>
         </View>
       </View>
       <View style={styled.content}>
-        <ScrollView>
-          {[...Array(6)].map((i, o) => {
-            return (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('NewsDetail')}
-                key={o}
-                style={styled.cardWrapper}>
-                <Card>
-                  <CardItem>
-                    <Left>
-                      <Thumbnail
-                        source={{
-                          uri:
-                            'https://via.placeholder.com/150.png?text=Newsportal',
-                        }}
-                      />
-                      <Body>
-                        <Text style={styled.title}>
-                          TitleTitleTitleTitle TitleTitle TitleTitleTitle
-                          TitleTitle
-                        </Text>
-                        <Text note>Date</Text>
-                      </Body>
-                    </Left>
-                  </CardItem>
-                  <CardItem cardBody>
-                    <Image
-                      source={{
-                        uri:
-                          'https://via.placeholder.com/420x220.png?text=Newsportal',
-                      }}
-                      style={styled.image}
-                    />
-                  </CardItem>
-                </Card>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
+        <FlatList data={data} renderItem={renderItem} />
       </View>
     </View>
   );

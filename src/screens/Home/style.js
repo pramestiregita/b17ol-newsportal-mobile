@@ -21,6 +21,7 @@ export default StyleSheet.create({
   },
   image: {
     height: 200,
+    width: 410,
     flex: 1,
   },
   adv: {

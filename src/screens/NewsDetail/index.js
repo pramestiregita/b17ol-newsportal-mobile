@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {View, Image, ScrollView} from 'react-native';
 import {Text} from 'native-base';
 
 import styled from './style';
 
-export default function NewsDetail() {
+export default function NewsDetail({route}) {
+  useEffect(() => {
+    console.log(route.params);
+  }, []);
   return (
     <View style={styled.parent}>
       <ScrollView>
