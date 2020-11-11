@@ -26,7 +26,6 @@ export default function ChangePassword() {
   const getData = async () => {
     const {value} = await dispatch(profileAction.getProfile(token));
     setData(value.data.data);
-    console.log(data);
   };
 
   const update = async (values) => {
