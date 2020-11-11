@@ -17,7 +17,7 @@ const LoginSchema = Yup.object().shape({
     .min(8, 'Password min. 8 character'),
 });
 
-export default function Login() {
+export default function Login({navigation}) {
   return (
     <View style={styled.parent}>
       <Image style={styled.logo} source={logo} />
@@ -69,8 +69,8 @@ export default function Login() {
               <Text style={styled.btnText}>login</Text>
             </Button>
             <TouchableOpacity
-              style={styled.registerLink}
-              onPress={() => console.log('pressed')}>
+              onPress={() => navigation.navigate('Signup')}
+              style={styled.registerLink}>
               <Text style={styled.link}>
                 Don't have an account? Register <Icon name="chevron-right" />
               </Text>

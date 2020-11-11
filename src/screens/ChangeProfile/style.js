@@ -4,7 +4,6 @@ export default StyleSheet.create({
   parent: {
     flex: 1,
     paddingHorizontal: 10,
-    backgroundColor: '#2a363b',
   },
   formWrapper: {
     marginTop: 20,
@@ -47,7 +46,7 @@ export default StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 50,
+    marginTop: 70,
   },
   content: {
     width: 200,

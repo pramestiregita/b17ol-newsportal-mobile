@@ -6,7 +6,7 @@ import {H3, Left, List, ListItem, Right, Thumbnail} from 'native-base';
 import styled from './style';
 import placeholder from '../../assets/avatar.png';
 
-export default function MyProfile() {
+export default function MyProfile({navigation}) {
   return (
     <View style={styled.parent}>
       {/* <View key={i.id} style={styled.profileWrapper}> */}
@@ -16,14 +16,14 @@ export default function MyProfile() {
           <H3 style={styled.profileName}>Name</H3>
           <Text style={styled.profileEmail}>Email</Text>
         </View>
-        <TouchableOpacity>
-          <Icon name="user-edit" size={15} />
+        <TouchableOpacity onPress={() => navigation.navigate('ChangeProfile')}>
+          <Icon name="user-edit" size={20} />
         </TouchableOpacity>
       </View>
       <View style={styled.listWrapper}>
         <List>
           <ListItem
-            // onPress={() => this.props.navigation.navigate('Settings')}
+            onPress={() => navigation.navigate('ChangePassword')}
             button
             first>
             <Left style={styled.listLeft}>

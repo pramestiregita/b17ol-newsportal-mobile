@@ -5,7 +5,7 @@ import {Card, CardItem, Text, Item, Input, Picker} from 'native-base';
 import {Formik} from 'formik';
 import styled from './style';
 
-export default function MyPost() {
+export default function MyPost({navigation}) {
   const [sort, setSort] = useState(1);
 
   useEffect(() => {
@@ -14,43 +14,49 @@ export default function MyPost() {
 
   return (
     <View style={styled.parent}>
-      <View style={styled.searchBar}>
-        <Formik
-          initialValues={{search: ''}}
-          onSubmit={(values) => values.search !== '' && console.log(values)}>
-          {({handleChange, handleBlur, handleSubmit, values}) => (
-            <Item style={styled.inputWrapper}>
-              <Input
-                style={styled.input}
-                onChangeText={handleChange('search')}
-                onBlur={handleBlur('search')}
-                value={values.search}
-                placeholder="Search"
-              />
-              <TouchableOpacity onPress={handleSubmit}>
-                <Icon name="search" size={15} />
-              </TouchableOpacity>
-            </Item>
-          )}
-        </Formik>
-      </View>
-      <View style={styled.sortWrapper}>
-        <Picker
-          note
-          mode="dropdown"
-          style={styled.sort}
-          selectedValue={sort}
-          onValueChange={(itemValue) => setSort(itemValue)}>
-          <Picker.Item label="Newest" value={1} />
-          <Picker.Item label="Oldest" value={2} />
-        </Picker>
+      <View style={styled.adv}>
+        <View style={styled.searchBar}>
+          <Card style={styled.search}>
+            <Formik
+              initialValues={{search: ''}}
+              onSubmit={(values) =>
+                values.search !== '' && console.log(values)
+              }>
+              {({handleChange, handleBlur, handleSubmit, values}) => (
+                <Item style={styled.inputWrapper}>
+                  <Input
+                    style={styled.input}
+                    onChangeText={handleChange('search')}
+                    onBlur={handleBlur('search')}
+                    value={values.search}
+                    placeholder="Search"
+                  />
+                  <TouchableOpacity onPress={handleSubmit}>
+                    <Icon name="search" size={20} />
+                  </TouchableOpacity>
+                </Item>
+              )}
+            </Formik>
+          </Card>
+        </View>
+        <View style={styled.sortWrapper}>
+          <Picker
+            note
+            mode="dropdown"
+            style={styled.sort}
+            selectedValue={sort}
+            onValueChange={(itemValue) => setSort(itemValue)}>
+            <Picker.Item label="Newest" value={1} />
+            <Picker.Item label="Oldest" value={2} />
+          </Picker>
+        </View>
       </View>
       <View style={styled.content}>
         <ScrollView>
           {[...Array(6)].map((i, o) => {
             return (
               <TouchableOpacity
-                onPress={() => console.log('card')}
+                onPress={() => navigation.navigate('NewsDetail')}
                 key={o}
                 style={styled.cardWrapper}>
                 <Card>

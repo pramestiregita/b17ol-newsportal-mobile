@@ -8,7 +8,7 @@ export default StyleSheet.create({
   profileWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 30,
+    marginTop: 50,
   },
   profile: {
     marginLeft: 15,
@@ -22,7 +22,7 @@ export default StyleSheet.create({
     color: 'grey',
   },
   listWrapper: {
-    marginTop: 100,
+    marginTop: 50,
   },
   listLeft: {
     flexDirection: 'column',

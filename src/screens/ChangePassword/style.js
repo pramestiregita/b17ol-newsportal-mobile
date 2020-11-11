@@ -6,7 +6,7 @@ export default StyleSheet.create({
     paddingHorizontal: 10,
   },
   formWrapper: {
-    marginTop: 20,
+    marginTop: 100,
   },
   card: {
     marginBottom: 10,

@@ -4,27 +4,53 @@ export default StyleSheet.create({
   parent: {
     flex: 1,
   },
-  searchBar: {
-    height: 50,
+  content: {
+    paddingHorizontal: 5,
+    flex: 1,
+  },
+  cardWrapper: {
+    marginBottom: 10,
+  },
+  header: {
+    width: 300,
+    marginRight: 10,
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  image: {
+    height: 200,
+    flex: 1,
+  },
+  adv: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#2a363b',
+  },
+  searchBar: {
+    paddingLeft: 5,
+    flex: 1,
+  },
+  search: {
+    borderRadius: 30,
   },
   inputWrapper: {
     flexDirection: 'row',
-    backgroundColor: 'white',
-    width: '95%',
-    height: '70%',
     alignItems: 'center',
-    paddingRight: 10,
-    borderRadius: 5,
+    paddingLeft: 10,
+    paddingHorizontal: 25,
+    borderRadius: 20,
   },
   input: {
     flex: 1,
     alignItems: 'center',
-    marginBottom: 10,
   },
-  content: {
-    paddingHorizontal: 10,
+  sortWrapper: {
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    height: 40,
+  },
+  sort: {
+    width: 120,
   },
 });
