@@ -4,6 +4,7 @@ export default StyleSheet.create({
   parent: {
     flex: 1,
     paddingVertical: 10,
+    marginTop: 50,
   },
   title: {
     fontWeight: 'bold',
@@ -16,7 +17,7 @@ export default StyleSheet.create({
     height: 200,
   },
   content: {
-    padding: 10,
+    padding: 20,
   },
   subTitle: {
     flexDirection: 'row',

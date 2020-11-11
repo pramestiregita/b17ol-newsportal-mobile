@@ -65,7 +65,9 @@ export default function MyPost({navigation}) {
               />
               <Body>
                 <Text style={styled.title}>{item.title}</Text>
-                <Text note>{moment(item.createdAt).format('MMM DD, YY')}</Text>
+                <Text note>
+                  {moment(item.createdAt).format('MMM DD, YY HH:mm')}
+                </Text>
               </Body>
             </Left>
           </CardItem>

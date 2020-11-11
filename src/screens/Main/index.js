@@ -130,7 +130,7 @@ export default function Main() {
             component={BottomTab}
           />
           <Stack.Screen
-            options={{title: ''}}
+            options={{title: '', headerTransparent: true}}
             name="NewsDetail"
             component={NewsDetail}
           />
