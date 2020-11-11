@@ -23,16 +23,20 @@ import newsAction from '../../redux/actions/news';
 
 export default function MyPost({navigation}) {
   const [sort, setSort] = useState('desc');
+  let [data, setData] = useState([]);
+  let [pageInfo, setPageInfo] = useState({});
   const {alertMsg, token} = useSelector((state) => state.auth);
-  const {data, pageInfo} = useSelector((state) => state.news);
   const dispatch = useDispatch();
 
   const getData = async () => {
-    await dispatch(newsAction.getAll(token));
+    const {value} = await dispatch(newsAction.getAll(token));
+    setData(value.data.data);
+    setPageInfo(value.data.pageInfo);
   };
 
   useEffect(() => {
     getData();
+    console.log(data);
   }, []);
 
   useEffect(() => {
@@ -48,6 +52,27 @@ export default function MyPost({navigation}) {
       });
     }
   }, [alertMsg]);
+
+  const nextPage = async () => {
+    const {value} = await dispatch(newsAction.next(token, pageInfo.nextLink));
+    const nextData = [...data, ...value.data.data];
+    console.log(nextData);
+    setData(nextData);
+    setPageInfo(value.data.pageInfo);
+  };
+
+  const searching = async (key) => {
+    const {value} = await dispatch(newsAction.search(token, key));
+    setData(value.data.data);
+    setPageInfo(value.data.pageInfo);
+  };
+
+  const sorting = async (v) => {
+    setSort(v);
+    const {value} = await dispatch(newsAction.sort(token, v));
+    setData(value.data.data);
+    setPageInfo(value.data.pageInfo);
+  };
 
   const renderItem = ({item}) => {
     return (
@@ -89,9 +114,7 @@ export default function MyPost({navigation}) {
           <Card style={styled.search}>
             <Formik
               initialValues={{search: ''}}
-              onSubmit={(values) =>
-                dispatch(newsAction.search(token, values.search))
-              }>
+              onSubmit={(values) => searching(values.search)}>
               {({handleChange, handleBlur, handleSubmit, values}) => (
                 <Item style={styled.inputWrapper}>
                   <Input
@@ -116,8 +139,7 @@ export default function MyPost({navigation}) {
             style={styled.sort}
             selectedValue={sort}
             onValueChange={(itemValue) => {
-              setSort(itemValue);
-              dispatch(newsAction.sort(token, itemValue));
+              sorting(itemValue);
             }}>
             <Picker.Item label="Newest" value={'desc'} />
             <Picker.Item label="Oldest" value={'asc'} />
@@ -125,7 +147,12 @@ export default function MyPost({navigation}) {
         </View>
       </View>
       <View style={styled.content}>
-        <FlatList data={data} renderItem={renderItem} />
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          onEndReached={nextPage}
+          onEndReachedThreshold={(0, 5)}
+        />
       </View>
     </View>
   );

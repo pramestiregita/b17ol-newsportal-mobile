@@ -17,4 +17,8 @@ export default {
     type: 'SORT',
     payload: http(token).get(`user/post?sort[createdAt]=${sort}`),
   }),
+  next: (token, link) => ({
+    type: 'NEXT',
+    payload: http(token).get(link.slice(22, link.length)),
+  }),
 };
