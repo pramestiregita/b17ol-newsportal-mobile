@@ -1,16 +1,99 @@
 import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {View, Image, ScrollView, TouchableOpacity} from 'react-native';
-import {Card, CardItem, Text, Item, Input, Picker} from 'native-base';
+import {View, Image, TouchableOpacity, FlatList} from 'react-native';
+import {Card, CardItem, Text, Item, Input, Picker, Toast} from 'native-base';
 import {Formik} from 'formik';
+import {API_URL} from '@env';
+
 import styled from './style';
+import postAction from '../../redux/actions/myPost';
 
 export default function MyPost({navigation}) {
-  const [sort, setSort] = useState(1);
+  const [sort, setSort] = useState('desc');
+  let [data, setData] = useState([]);
+  let [pageInfo, setPageInfo] = useState({});
+  const {alertMsg, token} = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  const getData = async () => {
+    const {value} = await dispatch(postAction.getAll(token));
+    setData(value.data.data);
+    setPageInfo(value.data.pageInfo);
+  };
 
   useEffect(() => {
-    console.log(sort);
-  }, [sort]);
+    getData();
+  }, []);
+
+  useEffect(() => {
+    if (alertMsg !== '') {
+      Toast.show({
+        text: alertMsg,
+        duration: 3000,
+        position: 'top',
+        type: 'success',
+        textStyle: {
+          fontWeight: 'bold',
+        },
+      });
+    }
+  }, [alertMsg]);
+
+  const nextPage = async () => {
+    const {value} = await dispatch(postAction.next(token, pageInfo.nextLink));
+    const nextData = [...data, ...value.data.data];
+    setData(nextData);
+    setPageInfo(value.data.pageInfo);
+  };
+
+  const searching = async (key) => {
+    const {value} = await dispatch(postAction.search(token, key));
+    setData(value.data.data);
+    setPageInfo(value.data.pageInfo);
+  };
+
+  const sorting = async (v) => {
+    setSort(v);
+    const {value} = await dispatch(postAction.sort(token, v));
+    setData(value.data.data);
+    setPageInfo(value.data.pageInfo);
+  };
+
+  const renderItem = ({item}) => {
+    return (
+      <TouchableOpacity
+        onPress={() => navigation.navigate('NewsDetail', {id: item.id})}
+        key={item.id}
+        style={styled.cardWrapper}>
+        <Card>
+          <CardItem>
+            <Text style={styled.title}>{item.title}</Text>
+          </CardItem>
+          <CardItem cardBody>
+            <Image
+              source={{
+                uri: API_URL.concat(item.picture.image),
+              }}
+              style={styled.image}
+            />
+          </CardItem>
+          <View style={styled.iconWrapper}>
+            <TouchableOpacity
+              onPress={() => console.log('edit')}
+              style={styled.iconEdit}>
+              <Icon style={styled.icon} name="pencil-alt" size={15} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => console.log('delete')}
+              style={styled.iconDelete}>
+              <Icon style={styled.icon} name="trash-alt" size={15} />
+            </TouchableOpacity>
+          </View>
+        </Card>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styled.parent}>
@@ -19,9 +102,7 @@ export default function MyPost({navigation}) {
           <Card style={styled.search}>
             <Formik
               initialValues={{search: ''}}
-              onSubmit={(values) =>
-                values.search !== '' && console.log(values)
-              }>
+              onSubmit={(values) => searching(values.search)}>
               {({handleChange, handleBlur, handleSubmit, values}) => (
                 <Item style={styled.inputWrapper}>
                   <Input
@@ -45,52 +126,21 @@ export default function MyPost({navigation}) {
             mode="dropdown"
             style={styled.sort}
             selectedValue={sort}
-            onValueChange={(itemValue) => setSort(itemValue)}>
-            <Picker.Item label="Newest" value={1} />
-            <Picker.Item label="Oldest" value={2} />
+            onValueChange={(itemValue) => sorting(itemValue)}>
+            <Picker.Item label="Newest" value={'desc'} />
+            <Picker.Item label="Oldest" value={'asc'} />
           </Picker>
         </View>
       </View>
       <View style={styled.content}>
-        <ScrollView>
-          {[...Array(6)].map((i, o) => {
-            return (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('NewsDetail')}
-                key={o}
-                style={styled.cardWrapper}>
-                <Card>
-                  <CardItem>
-                    <Text style={styled.title}>
-                      TitleTitleTitleTitleTitleTitleTitleTitleTitle TitleTitle
-                    </Text>
-                  </CardItem>
-                  <CardItem cardBody>
-                    <Image
-                      source={{
-                        uri:
-                          'https://via.placeholder.com/420x220.png?text=Newsportal',
-                      }}
-                      style={styled.image}
-                    />
-                  </CardItem>
-                  <View style={styled.iconWrapper}>
-                    <TouchableOpacity
-                      onPress={() => console.log('edit')}
-                      style={styled.iconEdit}>
-                      <Icon style={styled.icon} name="pencil-alt" size={15} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => console.log('delete')}
-                      style={styled.iconDelete}>
-                      <Icon style={styled.icon} name="trash-alt" size={15} />
-                    </TouchableOpacity>
-                  </View>
-                </Card>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
+        {Object.keys(data).length > 0 && (
+          <FlatList
+            data={data}
+            renderItem={renderItem}
+            onEndReached={nextPage}
+            onEndReachedThreshold={(0, 5)}
+          />
+        )}
       </View>
     </View>
   );
