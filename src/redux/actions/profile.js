@@ -10,4 +10,8 @@ export default {
     type: 'UPDATE_PROFILE',
     payload: http(token).patch('user/profile', qs.stringify(data)),
   }),
+  changePassword: (token, data) => ({
+    type: 'CHANGE_PASSWORD',
+    payload: http(token).patch('user/profile/password', qs.stringify(data)),
+  }),
 };
