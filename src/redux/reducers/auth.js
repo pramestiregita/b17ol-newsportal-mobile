@@ -58,7 +58,6 @@ export default (state = initialState, action) => {
     }
     case 'LOGOUT': {
       return {
-        ...state,
         token: '',
         alertMsg: '',
         isLogin: false,

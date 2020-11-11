@@ -2,7 +2,7 @@ const initialState = {
   data: {},
   isLoading: false,
   isError: false,
-  isSucces: false,
+  isSuccess: false,
   alertMsg: '',
 };
 
@@ -27,6 +27,37 @@ export default (state = initialState, action) => {
         isLoading: false,
         isError: false,
         data: action.payload.data.data,
+      };
+    }
+    case 'UPDATE_PROFILE_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    }
+    case 'UPDATE_PROFILE_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
+    }
+    case 'UPDATE_PROFILE_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        isSuccess: true,
+        alertMsg: action.payload.data.message,
+      };
+    }
+    case 'LOGOUT': {
+      return {
+        data: {},
+        isLoading: false,
+        isError: false,
+        isSuccess: false,
+        alertMsg: '',
       };
     }
     default: {
