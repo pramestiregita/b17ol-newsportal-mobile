@@ -1,4 +1,5 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {View, Text, Image} from 'react-native';
 import {Button, Card, Input, Item, Label} from 'native-base';
@@ -12,12 +13,9 @@ const PasswordSchema = Yup.object().shape({
   name: Yup.string().required('Please insert your name'),
 });
 
-const data = {
-  name: 'Jay',
-  email: 'jay@mail.com',
-};
-
 export default function ChangePassword() {
+  const {data} = useSelector((state) => state.profile);
+
   return (
     <View style={styled.parent}>
       <View style={styled.avatar}>
@@ -30,7 +28,7 @@ export default function ChangePassword() {
       </View>
       <Formik
         initialValues={{
-          name: data.name,
+          name: data.fullName,
           email: data.email,
         }}
         validationSchema={PasswordSchema}
