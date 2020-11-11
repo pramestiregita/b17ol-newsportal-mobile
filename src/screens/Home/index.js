@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {View, Image, ScrollView, TouchableOpacity} from 'react-native';
 import {
@@ -11,16 +12,32 @@ import {
   Left,
   Thumbnail,
   Body,
+  Toast,
 } from 'native-base';
 import {Formik} from 'formik';
 import styled from './style';
 
 export default function MyPost({navigation}) {
   const [sort, setSort] = useState(1);
+  const {alertMsg} = useSelector((state) => state.auth);
 
   useEffect(() => {
     console.log(sort);
   }, [sort]);
+
+  useEffect(() => {
+    if (alertMsg !== '') {
+      Toast.show({
+        text: alertMsg,
+        duration: 3000,
+        position: 'top',
+        type: 'success',
+        textStyle: {
+          fontWeight: 'bold',
+        },
+      });
+    }
+  }, [alertMsg]);
 
   return (
     <View style={styled.parent}>

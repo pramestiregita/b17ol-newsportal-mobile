@@ -1,4 +1,5 @@
 import React from 'react';
+import {useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {H3, Left, List, ListItem, Right, Thumbnail} from 'native-base';
@@ -7,6 +8,7 @@ import styled from './style';
 import placeholder from '../../assets/avatar.png';
 
 export default function MyProfile({navigation}) {
+  const dispatch = useDispatch();
   return (
     <View style={styled.parent}>
       {/* <View key={i.id} style={styled.profileWrapper}> */}
@@ -34,7 +36,7 @@ export default function MyProfile({navigation}) {
             </Right>
           </ListItem>
           {/* <ListItem onPress={this.logout} button> */}
-          <ListItem button last>
+          <ListItem onPress={() => dispatch({type: 'LOGOUT'})} button last>
             <Left style={styled.listLeft}>
               <Text style={[styled.listTitle, styled.logout]}>Logout</Text>
             </Left>

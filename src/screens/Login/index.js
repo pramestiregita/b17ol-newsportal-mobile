@@ -1,12 +1,14 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
-import {Button, Input, Item, Label} from 'native-base';
+import {Button, Input, Item, Label, Toast} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
 import styled from './style';
 import logo from '../../assets/icon.png';
+import authAction from '../../redux/actions/auth';
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -18,13 +20,30 @@ const LoginSchema = Yup.object().shape({
 });
 
 export default function Login({navigation}) {
+  const {alertMsg, isError} = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (alertMsg !== '') {
+      Toast.show({
+        text: alertMsg,
+        duration: 3000,
+        position: 'top',
+        type: isError ? 'danger' : 'success',
+        textStyle: {
+          fontWeight: 'bold',
+        },
+      });
+    }
+  }, [alertMsg, isError]);
+
   return (
     <View style={styled.parent}>
       <Image style={styled.logo} source={logo} />
       <Formik
         initialValues={{email: '', password: ''}}
         validationSchema={LoginSchema}
-        onSubmit={(values) => console.log(values)}>
+        onSubmit={(values) => dispatch(authAction.login(values))}>
         {({
           handleChange,
           handleBlur,
@@ -49,6 +68,7 @@ export default function Login({navigation}) {
             <Item style={styled.inputWrapper} floatingLabel>
               <Label style={styled.label}>Password</Label>
               <Input
+                secureTextEntry
                 style={styled.input}
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}

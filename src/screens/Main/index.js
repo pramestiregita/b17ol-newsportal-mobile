@@ -1,4 +1,5 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -110,7 +111,7 @@ const BottomTab = () => {
 };
 
 export default function Main() {
-  const isLogin = true;
+  const {isLogin} = useSelector((state) => state.auth);
   return (
     <NavigationContainer>
       {!isLogin ? (

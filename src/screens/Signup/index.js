@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import {Button, Input, Item, Label} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -7,6 +8,7 @@ import * as Yup from 'yup';
 
 import styled from './style';
 import logo from '../../assets/icon.png';
+import authAction from '../../redux/actions/auth';
 
 const LoginSchema = Yup.object().shape({
   fullName: Yup.string().required('Please input your name'),
@@ -19,13 +21,20 @@ const LoginSchema = Yup.object().shape({
 });
 
 export default function Login({navigation}) {
+  const {isSuccess} = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    isSuccess && navigation.navigate('Login');
+  }, [isSuccess, navigation]);
   return (
     <View style={styled.parent}>
       <Image style={styled.logo} source={logo} />
       <Formik
         initialValues={{fullName: '', email: '', password: ''}}
         validationSchema={LoginSchema}
-        onSubmit={(values) => console.log(values)}>
+        onSubmit={(values) => {
+          dispatch(authAction.signup(values));
+        }}>
         {({
           handleChange,
           handleBlur,
@@ -62,6 +71,7 @@ export default function Login({navigation}) {
             <Item style={styled.inputWrapper} floatingLabel>
               <Label style={styled.label}>Password</Label>
               <Input
+                secureTextEntry
                 style={styled.input}
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
@@ -72,7 +82,7 @@ export default function Login({navigation}) {
               <Text style={styled.alert}>{errors.password}</Text>
             ) : null}
             <Button onPress={handleSubmit} style={styled.btn} block rounded>
-              <Text style={styled.btnText}>login</Text>
+              <Text style={styled.btnText}>signup</Text>
             </Button>
             <TouchableOpacity
               onPress={() => navigation.navigate('Login')}
