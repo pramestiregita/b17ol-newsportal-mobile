@@ -105,7 +105,7 @@ export default function MyPost({navigation}) {
           </CardItem>
           <View style={styled.iconWrapper}>
             <TouchableOpacity
-              onPress={() => console.log('edit')}
+              onPress={() => navigation.navigate('EditPost', {id: item.id})}
               style={styled.iconEdit}>
               <Icon style={styled.icon} name="pencil-alt" size={15} />
             </TouchableOpacity>

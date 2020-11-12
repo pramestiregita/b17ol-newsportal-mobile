@@ -15,6 +15,7 @@ import Home from '../Home';
 import NewsDetail from '../NewsDetail';
 import CreatePost from '../CreatePost';
 import MyPost from '../MyPost';
+import EditPost from '../EditPost';
 import MyProfile from '../MyProfile';
 import ChangePassword from '../ChangePassword';
 import ChangeProfile from '../ChangeProfile';
@@ -79,6 +80,27 @@ const CreateStack = () => {
   );
 };
 
+const MyPostStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="MyPost"
+        component={MyPost}
+      />
+      <Stack.Screen
+        options={{
+          title: 'Edit your post',
+          headerTitleAlign: 'center',
+          headerTransparent: true,
+        }}
+        name="EditPost"
+        component={EditPost}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const BottomTab = () => {
   return (
     <Tab.Navigator
@@ -110,8 +132,8 @@ const BottomTab = () => {
           ),
           title: 'My Post',
         }}
-        name="MyPost"
-        component={MyPost}
+        name="MyPostStack"
+        component={MyPostStack}
       />
       <Tab.Screen
         options={{
