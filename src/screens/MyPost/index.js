@@ -24,7 +24,7 @@ const CANCEL_INDEX = 1;
 
 export default function MyPost({navigation}) {
   const [sort, setSort] = useState('desc');
-  // const [clicked, setClicked] = useState('');
+  const [loading, setLoading] = useState(false);
   let [data, setData] = useState([]);
   let [pageInfo, setPageInfo] = useState({});
   const {token} = useSelector((state) => state.auth);
@@ -175,6 +175,8 @@ export default function MyPost({navigation}) {
           <FlatList
             data={data}
             renderItem={renderItem}
+            refreshing={loading}
+            onRefresh={getData}
             onEndReached={nextPage}
             onEndReachedThreshold={(0, 5)}
           />
