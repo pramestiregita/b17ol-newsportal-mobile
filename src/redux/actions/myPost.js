@@ -21,4 +21,8 @@ export default {
     type: 'NEXT',
     payload: http(token).get(link.slice(22, link.length)),
   }),
+  delete: (token, id) => ({
+    type: 'DELETE',
+    payload: http(token).delete(`user/my-post/${id}`),
+  }),
 };

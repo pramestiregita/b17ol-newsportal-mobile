@@ -4,6 +4,8 @@ const initialState = {
   pageInfo: {},
   isLoading: false,
   isError: false,
+  isSuccess: false,
+  alertMsg: '',
 };
 
 export default (state = initialState, action) => {
@@ -116,6 +118,39 @@ export default (state = initialState, action) => {
         isError: false,
         data: action.payload.data.data,
         pageInfo: action.payload.data.pageInfo,
+      };
+    }
+    case 'DELETE_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    }
+    case 'DELETE_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
+    }
+    case 'DELETE_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        isSuccess: true,
+        alertMsg: action.payload.data.message,
+      };
+    }
+    case 'LOGOUT': {
+      return {
+        data: {},
+        detail: {},
+        pageInfo: {},
+        isLoading: false,
+        isError: false,
+        isSuccess: false,
+        alertMsg: '',
       };
     }
     default: {

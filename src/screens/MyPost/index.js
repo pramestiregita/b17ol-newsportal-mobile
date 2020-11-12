@@ -2,18 +2,33 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {View, Image, TouchableOpacity, FlatList} from 'react-native';
-import {Card, CardItem, Text, Item, Input, Picker, Toast} from 'native-base';
+import {
+  Card,
+  CardItem,
+  Text,
+  Item,
+  Input,
+  Picker,
+  Toast,
+  ActionSheet,
+} from 'native-base';
 import {Formik} from 'formik';
 import {API_URL} from '@env';
 
 import styled from './style';
 import postAction from '../../redux/actions/myPost';
 
+const BUTTONS = ['Delete', 'Cancel'];
+// const DESTRUCTIVE_INDEX = 0;
+const CANCEL_INDEX = 1;
+
 export default function MyPost({navigation}) {
   const [sort, setSort] = useState('desc');
+  // const [clicked, setClicked] = useState('');
   let [data, setData] = useState([]);
   let [pageInfo, setPageInfo] = useState({});
-  const {alertMsg, token} = useSelector((state) => state.auth);
+  const {token} = useSelector((state) => state.auth);
+  const {alertMsg, isSuccess} = useSelector((state) => state.myPost);
   const dispatch = useDispatch();
 
   const getData = async () => {
@@ -32,7 +47,7 @@ export default function MyPost({navigation}) {
         text: alertMsg,
         duration: 3000,
         position: 'top',
-        type: 'success',
+        type: isSuccess ? 'success' : 'danger',
         textStyle: {
           fontWeight: 'bold',
         },
@@ -60,6 +75,16 @@ export default function MyPost({navigation}) {
     setPageInfo(value.data.pageInfo);
   };
 
+  const deletePost = async (index, id) => {
+    // setClicked(index);
+    // console.log(index);
+    if (index === 0) {
+      // console.log('deleted');
+      await dispatch(postAction.delete(token, id));
+    }
+    getData();
+  };
+
   const renderItem = ({item}) => {
     return (
       <TouchableOpacity
@@ -85,7 +110,20 @@ export default function MyPost({navigation}) {
               <Icon style={styled.icon} name="pencil-alt" size={15} />
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => console.log('delete')}
+              onPress={() =>
+                ActionSheet.show(
+                  {
+                    options: BUTTONS,
+                    cancelButtonIndex: CANCEL_INDEX,
+                    // destructiveButtonIndex: DESTRUCTIVE_INDEX,
+                    title: 'Are you sure to delete this post?',
+                  },
+                  (buttonIndex) => {
+                    // setClicked(BUTTONS[]);
+                    deletePost(buttonIndex, item.id);
+                  },
+                )
+              }
               style={styled.iconDelete}>
               <Icon style={styled.icon} name="trash-alt" size={15} />
             </TouchableOpacity>
