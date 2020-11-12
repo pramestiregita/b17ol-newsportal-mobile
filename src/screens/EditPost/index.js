@@ -16,6 +16,9 @@ export default function EditPost() {
         </Form>
       </View>
       <Button style={styled.btn} block rounded>
+        <Text style={styled.btnText}>Select Image</Text>
+      </Button>
+      <Button style={styled.btn} block rounded>
         <Text style={styled.btnText}>Write News</Text>
       </Button>
     </View>
