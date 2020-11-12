@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {H3, Left, List, ListItem, Right, Thumbnail} from 'native-base';
+import {API_URL} from '@env';
 
 import styled from './style';
 import placeholder from '../../assets/avatar.png';
@@ -25,7 +26,14 @@ export default function MyProfile({navigation}) {
     Object.keys(data).length > 0 && (
       <View style={styled.parent}>
         <View key={data.id} style={styled.profileWrapper}>
-          <Thumbnail large source={placeholder} />
+          <Thumbnail
+            large
+            source={
+              data.avatar !== null
+                ? {uri: API_URL.concat(data.avatar.image)}
+                : {placeholder}
+            }
+          />
           <View style={styled.profile}>
             <H3 style={styled.profileName}>{data.fullName}</H3>
             <Text style={styled.profileEmail}>{data.email}</Text>

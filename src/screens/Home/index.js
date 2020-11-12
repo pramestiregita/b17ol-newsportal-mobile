@@ -22,7 +22,7 @@ import styled from './style';
 import newsAction from '../../redux/actions/news';
 
 export default function MyPost({navigation}) {
-  const loading = useState(false);
+  const [loading, setLoading] = useState(false);
   const [sort, setSort] = useState('desc');
   let [data, setData] = useState([]);
   let [pageInfo, setPageInfo] = useState({});

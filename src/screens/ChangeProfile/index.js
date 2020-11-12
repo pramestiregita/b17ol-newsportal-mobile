@@ -5,6 +5,7 @@ import {View, Text, Image, ScrollView} from 'react-native';
 import {Button, Card, Input, Item, Label, Toast} from 'native-base';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {API_URL} from '@env';
 
 import styled from './style';
 import avatar from '../../assets/avatar.png';
@@ -60,7 +61,11 @@ export default function ChangePassword() {
               <Image
                 resizeMethod="resize"
                 style={styled.image}
-                source={avatar}
+                source={
+                  data.avatar !== null
+                    ? {uri: API_URL.concat(data.avatar.image)}
+                    : avatar
+                }
               />
               <Button style={styled.btn} block rounded>
                 <Text style={styled.btnText}>Change Picture</Text>

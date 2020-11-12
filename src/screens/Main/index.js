@@ -13,6 +13,7 @@ import Login from '../Login';
 import Signup from '../Signup';
 import Home from '../Home';
 import NewsDetail from '../NewsDetail';
+import CreatePost from '../CreatePost';
 import MyPost from '../MyPost';
 import MyProfile from '../MyProfile';
 import ChangePassword from '../ChangePassword';
@@ -62,6 +63,22 @@ const ProfileStack = () => {
   );
 };
 
+const CreateStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        options={{
+          title: 'Write a news',
+          headerTitleAlign: 'center',
+          headerTransparent: true,
+        }}
+        name="CreatePost"
+        component={CreatePost}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const BottomTab = () => {
   return (
     <Tab.Navigator
@@ -83,8 +100,8 @@ const BottomTab = () => {
           ),
           title: 'Write News',
         }}
-        name="CreatePost"
-        component={MyPost}
+        name="CreatePostStack"
+        component={CreateStack}
       />
       <Tab.Screen
         options={{
