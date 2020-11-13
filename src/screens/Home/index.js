@@ -37,7 +37,6 @@ export default function MyPost({navigation}) {
 
   useEffect(() => {
     getData();
-    console.log(data);
   }, []);
 
   useEffect(() => {
@@ -99,7 +98,12 @@ export default function MyPost({navigation}) {
           </CardItem>
           <CardItem cardBody>
             <Image
-              source={{uri: API_URL.concat(item.picture.image)}}
+              source={{
+                uri:
+                  item.picture === null
+                    ? 'https://via.placeholder.com/420.png?text=Newsportal'
+                    : API_URL.concat(item.picture.image),
+              }}
               style={styled.image}
             />
           </CardItem>

@@ -23,7 +23,7 @@ const BUTTONS = ['Delete', 'Cancel'];
 const CANCEL_INDEX = 1;
 
 export default function MyPost({navigation}) {
-  const [sort, setSort] = useState('desc');
+  const [sort, setSort] = useState('none');
   const [loading, setLoading] = useState(false);
   let [data, setData] = useState([]);
   let [pageInfo, setPageInfo] = useState({});
@@ -69,7 +69,7 @@ export default function MyPost({navigation}) {
   };
 
   const sorting = async (v) => {
-    setSort(v);
+    // setSort(v);
     const {value} = await dispatch(postAction.sort(token, v));
     setData(value.data.data);
     setPageInfo(value.data.pageInfo);
@@ -98,7 +98,10 @@ export default function MyPost({navigation}) {
           <CardItem cardBody>
             <Image
               source={{
-                uri: API_URL.concat(item.picture.image),
+                uri:
+                  item.picture === null
+                    ? 'https://via.placeholder.com/400x200.png?text=Newsportal'
+                    : API_URL.concat(item.picture.image),
               }}
               style={styled.image}
             />
@@ -163,8 +166,9 @@ export default function MyPost({navigation}) {
             note
             mode="dropdown"
             style={styled.sort}
-            selectedValue={sort}
+            // selectedValue={sort}
             onValueChange={(itemValue) => sorting(itemValue)}>
+            {/* <Picker.Item label="Sort" value={'none'} /> */}
             <Picker.Item label="Newest" value={'desc'} />
             <Picker.Item label="Oldest" value={'asc'} />
           </Picker>

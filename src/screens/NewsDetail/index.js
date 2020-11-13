@@ -45,7 +45,10 @@ export default function NewsDetail({route}) {
           <Image
             style={styled.image}
             source={{
-              uri: API_URL.concat(data.picture.image),
+              uri:
+                data.picture === null
+                  ? 'https://via.placeholder.com/420.png?text=Newsportal'
+                  : API_URL.concat(data.picture.image),
             }}
           />
           <View style={styled.content}>

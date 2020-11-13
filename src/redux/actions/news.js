@@ -19,6 +19,6 @@ export default {
   }),
   next: (token, link) => ({
     type: 'NEXT',
-    payload: http(token).get(link.slice(22, link.length)),
+    payload: http(token).get(link !== null && link.slice(22, link.length)),
   }),
 };
