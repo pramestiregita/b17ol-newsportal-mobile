@@ -10,20 +10,20 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'GET_NEWS_PENDING': {
+    case 'GET_MY_POST_PENDING': {
       return {
         ...state,
         isLoading: true,
       };
     }
-    case 'GET_NEWS_REJECTED': {
+    case 'GET_MY_POST_REJECTED': {
       return {
         ...state,
         isLoading: false,
         isError: true,
       };
     }
-    case 'GET_NEWS_FULFILLED': {
+    case 'GET_MY_POST_FULFILLED': {
       return {
         ...state,
         isLoading: false,
@@ -32,20 +32,20 @@ export default (state = initialState, action) => {
         pageInfo: action.payload.data.pageInfo,
       };
     }
-    case 'GET_NEWS_DETAIL_PENDING': {
+    case 'GET_MY_POST_DETAIL_PENDING': {
       return {
         ...state,
         isLoading: true,
       };
     }
-    case 'GET_NEWS_DETAIL_REJECTED': {
+    case 'GET_MY_POST_DETAIL_REJECTED': {
       return {
         ...state,
         isLoading: false,
         isError: true,
       };
     }
-    case 'GET_NEWS_DETAIL_FULFILLED': {
+    case 'GET_MY_POST_DETAIL_FULFILLED': {
       return {
         ...state,
         isLoading: false,
@@ -54,20 +54,20 @@ export default (state = initialState, action) => {
         pageInfo: action.payload.data.pageInfo,
       };
     }
-    case 'SEARCH_PENDING': {
+    case 'SEARCH_MY_POST_PENDING': {
       return {
         ...state,
         isLoading: true,
       };
     }
-    case 'SEARCH_REJECTED': {
+    case 'SEARCH_MY_POST_REJECTED': {
       return {
         ...state,
         isLoading: false,
         isError: true,
       };
     }
-    case 'SEARCH_FULFILLED': {
+    case 'SEARCH_MY_POST_FULFILLED': {
       return {
         ...state,
         isLoading: false,
@@ -76,20 +76,20 @@ export default (state = initialState, action) => {
         pageInfo: action.payload.data.pageInfo,
       };
     }
-    case 'SORT_PENDING': {
+    case 'SORT_MY_POST_PENDING': {
       return {
         ...state,
         isLoading: true,
       };
     }
-    case 'SORT_REJECTED': {
+    case 'SORT_MY_POST_REJECTED': {
       return {
         ...state,
         isLoading: false,
         isError: true,
       };
     }
-    case 'SORT_FULFILLED': {
+    case 'SORT_MY_POST_FULFILLED': {
       return {
         ...state,
         isLoading: false,
@@ -98,20 +98,20 @@ export default (state = initialState, action) => {
         pageInfo: action.payload.data.pageInfo,
       };
     }
-    case 'NEXT_PENDING': {
+    case 'NEXT_MY_POST_PENDING': {
       return {
         ...state,
         isLoading: true,
       };
     }
-    case 'NEXT_REJECTED': {
+    case 'NEXT_MY_POST_REJECTED': {
       return {
         ...state,
         isLoading: false,
         isError: true,
       };
     }
-    case 'NEXT_FULFILLED': {
+    case 'NEXT_MY_POST_FULFILLED': {
       return {
         ...state,
         isLoading: false,
@@ -120,26 +120,49 @@ export default (state = initialState, action) => {
         pageInfo: action.payload.data.pageInfo,
       };
     }
-    case 'DELETE_PENDING': {
+    case 'DELETE_MY_POST_PENDING': {
       return {
         ...state,
         isLoading: true,
       };
     }
-    case 'DELETE_REJECTED': {
+    case 'DELETE_MY_POST_REJECTED': {
       return {
         ...state,
         isLoading: false,
         isError: true,
       };
     }
-    case 'DELETE_FULFILLED': {
+    case 'DELETE_MY_POST_FULFILLED': {
       return {
         ...state,
         isLoading: false,
         isError: false,
         isSuccess: true,
         alertMsg: action.payload.data.message,
+      };
+    }
+    case 'CREATE_MY_POST_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    }
+    case 'CREATE_MY_POST_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
+    }
+    case 'CREATE_MY_POST_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        isSuccess: true,
+        alertMsg: action.payload.data.message,
+        data: action.payload.data.data,
       };
     }
     case 'LOGOUT': {

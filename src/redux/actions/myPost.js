@@ -2,27 +2,34 @@ import http from '../../helpers/http';
 
 export default {
   getAll: (token) => ({
-    type: 'GET_NEWS',
-    payload: http(token).get('user/my-post?limit=2'),
+    type: 'GET_MY_POST',
+    payload: http(token).get('user/my-post?limit=5'),
   }),
   getDetail: (token, id) => ({
-    type: 'GET_NEWS_DETAIL',
+    type: 'GET_MY_POST_DETAIL',
     payload: http(token).get(`user/my-post/${id}`),
   }),
   search: (token, search) => ({
-    type: 'SEARCH',
+    type: 'SEARCH_MY_POST',
     payload: http(token).get(`user/my-post?search=${search}`),
   }),
   sort: (token, sort) => ({
-    type: 'SORT',
+    type: 'SORT_MY_POST',
     payload: http(token).get(`user/my-post?sort[createdAt]=${sort}`),
   }),
   next: (token, link) => ({
-    type: 'NEXT',
-    payload: http(token).get(link !== null && link.slice(22, link.length)),
+    type: 'NEXT_MY_POST',
+    payload: http(token).get(link),
   }),
   delete: (token, id) => ({
-    type: 'DELETE',
+    type: 'DELETE_MY_POST',
     payload: http(token).delete(`user/my-post/${id}`),
   }),
+  create: (token, data) => ({
+    type: 'CREATE_MY_POST',
+    payload: http(token).post('user/post', data),
+  }),
+  // edit:(token,data)=>({
+  //   type:
+  // })
 };

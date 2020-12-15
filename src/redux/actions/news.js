@@ -3,7 +3,7 @@ import http from '../../helpers/http';
 export default {
   getAll: (token) => ({
     type: 'GET_NEWS',
-    payload: http(token).get('user/post?limit=2'),
+    payload: http(token).get('user/post?limit=5'),
   }),
   getDetail: (token, id) => ({
     type: 'GET_NEWS_DETAIL',
@@ -19,6 +19,6 @@ export default {
   }),
   next: (token, link) => ({
     type: 'NEXT',
-    payload: http(token).get(link !== null && link.slice(22, link.length)),
+    payload: http(token).get(link),
   }),
 };

@@ -19,12 +19,14 @@ export default StyleSheet.create({
   inputWrapper: {
     borderBottomColor: '#e74b5b',
     marginVertical: 10,
+    borderBottomWidth: 2,
   },
   label: {
     color: '#e74b5b',
   },
   input: {
     color: '#e74b5b',
+    fontSize: 20,
   },
   alert: {
     color: '#e74b5b',

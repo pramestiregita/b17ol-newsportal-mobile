@@ -13,11 +13,11 @@ export default StyleSheet.create({
     height: 100,
   },
   formWrapper: {
-    // marginVertical: 50,
     width: '100%',
   },
   inputWrapper: {
     borderBottomColor: '#e74b5b',
+    borderBottomWidth: 1,
     marginVertical: 10,
   },
   label: {
@@ -25,6 +25,7 @@ export default StyleSheet.create({
   },
   input: {
     color: '#e74b5b',
+    fontSize: 20,
   },
   alert: {
     color: '#e74b5b',

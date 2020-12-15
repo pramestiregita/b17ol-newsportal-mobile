@@ -74,6 +74,52 @@ export default (state = initialState, action) => {
         alertMsg: action.payload.data.message,
       };
     }
+    case 'ADD_AVATAR_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    }
+    case 'ADD_AVATAR_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+        alertMsg: action.payload.response.data.message,
+      };
+    }
+    case 'ADD_AVATAR_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        isSuccess: true,
+        alertMsg: action.payload.data.message,
+      };
+    }
+    case 'CHANGE_AVATAR_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    }
+    case 'CHANGE_AVATAR_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+        alertMsg: action.payload.response.data.message,
+      };
+    }
+    case 'CHANGE_AVATAR_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        isSuccess: true,
+        alertMsg: action.payload.data.message,
+      };
+    }
     case 'LOGOUT': {
       return {
         data: {},
@@ -81,6 +127,14 @@ export default (state = initialState, action) => {
         isError: false,
         isSuccess: false,
         alertMsg: '',
+      };
+    }
+    case 'CLEAR_PROFILE': {
+      return {
+        ...state,
+        alertMsg: '',
+        isSuccess: false,
+        isError: false,
       };
     }
     default: {

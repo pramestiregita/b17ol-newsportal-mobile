@@ -1,28 +1,27 @@
 import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {View, Text, Image} from 'react-native';
-import {Button, Toast} from 'native-base';
+import {Button} from 'native-base';
+import RNBootSplash from 'react-native-bootsplash';
 
 import styled from './style';
 
 import logo from '../../assets/logo.png';
 
+import toast from '../../components/Toast';
+
 export default function Landingpage({navigation}) {
   const {alertMsg} = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (alertMsg !== '') {
-      Toast.show({
-        text: alertMsg,
-        duration: 3000,
-        position: 'top',
-        type: 'success',
-        textStyle: {
-          fontWeight: 'bold',
-        },
-      });
-    }
-  }, [alertMsg]);
+    RNBootSplash.hide({});
+  }, []);
+
+  // useEffect(() => {
+  //   if (alertMsg !== '') {
+  //     toast(alertMsg);
+  //   }
+  // }, [alertMsg]);
 
   return (
     <View style={styled.parent}>

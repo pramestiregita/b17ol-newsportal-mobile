@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React from 'react';
+import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {View, Image, ScrollView} from 'react-native';
 import {Text} from 'native-base';
@@ -7,21 +7,9 @@ import moment from 'moment';
 import {API_URL} from '@env';
 
 import styled from './style';
-import newsAction from '../../redux/actions/news';
 
-export default function NewsDetail({route}) {
-  const {token} = useSelector((state) => state.auth);
+export default function NewsDetail() {
   const {detail: data} = useSelector((state) => state.news);
-  const {id} = route.params;
-  const dispatch = useDispatch();
-
-  const getData = async () => {
-    await dispatch(newsAction.getDetail(token, id));
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   return (
     Object.keys(data).length > 0 && (

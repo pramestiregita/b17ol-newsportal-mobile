@@ -14,4 +14,15 @@ export default {
     type: 'CHANGE_PASSWORD',
     payload: http(token).patch('user/profile/password', qs.stringify(data)),
   }),
+  clear: () => ({
+    type: 'CLEAR_PROFILE',
+  }),
+  addAvatar: (token, ava) => ({
+    type: 'ADD_AVATAR',
+    payload: http(token).post('user/profile/image', ava),
+  }),
+  changeAvatar: (token, ava) => ({
+    type: 'CHANGE_AVATAR',
+    payload: http(token).post('user/profile/image', ava),
+  }),
 };

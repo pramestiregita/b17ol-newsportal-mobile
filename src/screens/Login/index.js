@@ -1,7 +1,14 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
-import {Button, Input, Item, Label, Toast} from 'native-base';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Keyboard,
+  TextInput,
+} from 'react-native';
+import {Button} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -9,6 +16,8 @@ import * as Yup from 'yup';
 import styled from './style';
 import logo from '../../assets/icon.png';
 import authAction from '../../redux/actions/auth';
+
+import Modal from '../../components/Modal';
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -20,30 +29,41 @@ const LoginSchema = Yup.object().shape({
 });
 
 export default function Login({navigation}) {
-  const {alertMsg, isError} = useSelector((state) => state.auth);
+  const [error, setError] = useState(false);
+
+  const {alertMsg, isError, isLoading} = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (alertMsg !== '') {
-      Toast.show({
-        text: alertMsg,
-        duration: 3000,
-        position: 'top',
-        type: isError ? 'danger' : 'success',
-        textStyle: {
-          fontWeight: 'bold',
-        },
-      });
+  const doLogin = async (values) => {
+    try {
+      await dispatch(authAction.login(values));
+    } catch (e) {
+      console.log(e.message);
     }
-  }, [alertMsg, isError]);
+  };
+
+  useEffect(() => {
+    if (isError) {
+      setError(true);
+      setTimeout(() => {
+        setError(false);
+      }, 2000);
+    }
+  }, [isError]);
 
   return (
     <View style={styled.parent}>
+      <Modal visible={isLoading} type="load" />
+      <Modal visible={error} type="error" message={alertMsg} />
+
       <Image style={styled.logo} source={logo} />
       <Formik
         initialValues={{email: '', password: ''}}
         validationSchema={LoginSchema}
-        onSubmit={(values) => dispatch(authAction.login(values))}>
+        onSubmit={(values) => {
+          Keyboard.dismiss();
+          doLogin(values);
+        }}>
         {({
           handleChange,
           handleBlur,
@@ -53,28 +73,28 @@ export default function Login({navigation}) {
           touched,
         }) => (
           <View style={styled.formWrapper}>
-            <Item style={styled.inputWrapper} floatingLabel>
-              <Label style={styled.label}>Email</Label>
-              <Input
+            <View style={styled.inputWrapper} floatingLabel>
+              <Text style={styled.label}>Email</Text>
+              <TextInput
                 style={styled.input}
                 onChangeText={handleChange('email')}
                 onBlur={handleBlur('email')}
                 value={values.email}
               />
-            </Item>
+            </View>
             {errors.email && touched.email ? (
               <Text style={styled.alert}>{errors.email}</Text>
             ) : null}
-            <Item style={styled.inputWrapper} floatingLabel>
-              <Label style={styled.label}>Password</Label>
-              <Input
+            <View style={styled.inputWrapper} floatingLabel>
+              <Text style={styled.label}>Password</Text>
+              <TextInput
                 secureTextEntry
                 style={styled.input}
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
                 value={values.password}
               />
-            </Item>
+            </View>
             {errors.password && touched.password ? (
               <Text style={styled.alert}>{errors.password}</Text>
             ) : null}

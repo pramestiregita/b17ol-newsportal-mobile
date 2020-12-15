@@ -8,21 +8,9 @@ export default StyleSheet.create({
     paddingHorizontal: 5,
     flex: 1,
   },
-  cardWrapper: {
-    marginBottom: 10,
-  },
   header: {
     width: 300,
     marginRight: 10,
-  },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 18,
-  },
-  image: {
-    height: 200,
-    width: 410,
-    flex: 1,
   },
   adv: {
     flexDirection: 'row',

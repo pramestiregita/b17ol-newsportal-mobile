@@ -85,6 +85,15 @@ export default function MyPost({navigation}) {
     getData();
   };
 
+  const edit = async (id) => {
+    try {
+      await dispatch(postAction.getDetail(token, id));
+      navigation.navigate('EditPost', {id});
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
   const renderItem = ({item}) => {
     return (
       <TouchableOpacity
@@ -108,7 +117,7 @@ export default function MyPost({navigation}) {
           </CardItem>
           <View style={styled.iconWrapper}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('EditPost', {id: item.id})}
+              onPress={() => edit(item.id)}
               style={styled.iconEdit}>
               <Icon style={styled.icon} name="pencil-alt" size={15} />
             </TouchableOpacity>

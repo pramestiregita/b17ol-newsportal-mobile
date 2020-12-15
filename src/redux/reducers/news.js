@@ -1,5 +1,5 @@
 const initialState = {
-  data: {},
+  data: [],
   detail: {},
   pageInfo: {},
   isLoading: false,
@@ -114,7 +114,7 @@ export default (state = initialState, action) => {
         ...state,
         isLoading: false,
         isError: false,
-        data: action.payload.data.data,
+        data: [...state.data, ...action.payload.data.data],
         pageInfo: action.payload.data.pageInfo,
       };
     }

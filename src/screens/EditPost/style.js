@@ -6,18 +6,34 @@ export default StyleSheet.create({
     paddingHorizontal: 20,
   },
   form: {
-    marginTop: 100,
+    marginTop: 10,
+  },
+  title: {
+    marginTop: 20,
   },
   content: {
     marginTop: 20,
   },
   btn: {
-    marginTop: 20,
+    marginVertical: 20,
     backgroundColor: '#e74b5b',
   },
   btnText: {
     textTransform: 'uppercase',
     fontWeight: 'bold',
     color: '#2a363b',
+  },
+  image: {
+    width: 400,
+    height: 200,
+    marginTop: 20,
+  },
+  imagePicker: {
+    marginTop: 50,
+  },
+  alert: {
+    color: '#e74b5b',
+    marginBottom: 10,
+    fontStyle: 'italic',
   },
 });

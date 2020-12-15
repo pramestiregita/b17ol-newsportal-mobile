@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -29,9 +30,9 @@ export default function MyProfile({navigation}) {
           <Thumbnail
             large
             source={
-              data.avatar !== null
+              data.avatar
                 ? {uri: API_URL.concat(data.avatar.image)}
-                : {placeholder}
+                : placeholder
             }
           />
           <View style={styled.profile}>

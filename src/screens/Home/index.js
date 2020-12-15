@@ -1,115 +1,73 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {View, Image, TouchableOpacity, FlatList} from 'react-native';
-import {
-  Card,
-  CardItem,
-  Text,
-  Item,
-  Input,
-  Picker,
-  Left,
-  Thumbnail,
-  Body,
-  Toast,
-} from 'native-base';
+import {View, TouchableOpacity, FlatList, ToastAndroid} from 'react-native';
+import {Card, Item, Input, Picker} from 'native-base';
 import {Formik} from 'formik';
-import moment from 'moment';
-import {API_URL} from '@env';
+import RNBootSplash from 'react-native-bootsplash';
 
 import styled from './style';
 import newsAction from '../../redux/actions/news';
 
-export default function MyPost({navigation}) {
-  const [loading, setLoading] = useState(false);
+import List from '../../components/CardNews';
+
+export default function MyPost({}) {
+  const [loading] = useState(false);
   const [sort, setSort] = useState('desc');
-  let [data, setData] = useState([]);
-  let [pageInfo, setPageInfo] = useState({});
   const {alertMsg, token} = useSelector((state) => state.auth);
+  const {data: news, pageInfo} = useSelector((state) => state.news);
   const dispatch = useDispatch();
 
   const getData = async () => {
-    const {value} = await dispatch(newsAction.getAll(token));
-    setData(value.data.data);
-    setPageInfo(value.data.pageInfo);
+    try {
+      await dispatch(newsAction.getAll(token));
+    } catch (e) {
+      console.log(e.message);
+    }
   };
 
   useEffect(() => {
     getData();
+    RNBootSplash.hide({});
   }, []);
 
   useEffect(() => {
     if (alertMsg !== '') {
-      Toast.show({
-        text: alertMsg,
-        duration: 3000,
-        position: 'top',
-        type: 'success',
-        textStyle: {
-          fontWeight: 'bold',
-        },
-      });
+      ToastAndroid.showWithGravity(
+        alertMsg,
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+      );
+      dispatch({type: 'CLEAR'});
     }
   }, [alertMsg]);
 
   const nextPage = async () => {
-    const {value} = await dispatch(newsAction.next(token, pageInfo.nextLink));
-    const nextData = [...data, ...value.data.data];
-    console.log(nextData);
-    setData(nextData);
-    setPageInfo(value.data.pageInfo);
+    if (pageInfo.nextLink) {
+      try {
+        await dispatch(newsAction.next(token, pageInfo.nextLink));
+      } catch (e) {
+        console.log(e.message);
+      }
+    }
   };
 
   const searching = async (key) => {
-    const {value} = await dispatch(newsAction.search(token, key));
-    setData(value.data.data);
-    setPageInfo(value.data.pageInfo);
+    try {
+      await dispatch(newsAction.search(token, key));
+    } catch (e) {
+      console.log(e.message);
+    }
   };
 
   const sorting = async (v) => {
-    setSort(v);
-    const {value} = await dispatch(newsAction.sort(token, v));
-    setData(value.data.data);
-    setPageInfo(value.data.pageInfo);
-  };
-
-  const renderItem = ({item}) => {
-    return (
-      <TouchableOpacity
-        onPress={() => navigation.navigate('NewsDetail', {id: item.id})}
-        key={item.id}
-        style={styled.cardWrapper}>
-        <Card>
-          <CardItem>
-            <Left>
-              <Thumbnail
-                source={{
-                  uri: 'https://via.placeholder.com/150.png?text=Newsportal',
-                }}
-              />
-              <Body>
-                <Text style={styled.title}>{item.title}</Text>
-                <Text note>
-                  {moment(item.createdAt).format('MMM DD, YY HH:mm')}
-                </Text>
-              </Body>
-            </Left>
-          </CardItem>
-          <CardItem cardBody>
-            <Image
-              source={{
-                uri:
-                  item.picture === null
-                    ? 'https://via.placeholder.com/420.png?text=Newsportal'
-                    : API_URL.concat(item.picture.image),
-              }}
-              style={styled.image}
-            />
-          </CardItem>
-        </Card>
-      </TouchableOpacity>
-    );
+    try {
+      setSort(v);
+      await dispatch(newsAction.sort(token, v));
+    } catch (e) {
+      console.log(e.message);
+    }
   };
 
   return (
@@ -128,6 +86,7 @@ export default function MyPost({navigation}) {
                     onBlur={handleBlur('search')}
                     value={values.search}
                     placeholder="Search"
+                    onSubmitEditing={handleSubmit}
                   />
                   <TouchableOpacity onPress={handleSubmit}>
                     <Icon name="search" size={20} />
@@ -153,12 +112,13 @@ export default function MyPost({navigation}) {
       </View>
       <View style={styled.content}>
         <FlatList
-          data={data}
-          renderItem={renderItem}
+          data={news}
+          renderItem={({item}) => <List item={item} />}
           refreshing={loading}
           onRefresh={getData}
           onEndReached={nextPage}
           onEndReachedThreshold={(0, 5)}
+          keyExtractor={(item) => item.id.toString()}
         />
       </View>
     </View>
