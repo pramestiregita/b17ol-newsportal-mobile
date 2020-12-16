@@ -63,7 +63,6 @@ export default function CreatePost({navigation, route}) {
           );
           if (value.data.success) {
             await dispatch(myPostAction.getAll(token));
-            navigation.navigate('MyPost');
           }
         } catch (e) {
           console.log(e.message);
