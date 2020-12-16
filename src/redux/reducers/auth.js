@@ -57,14 +57,7 @@ export default (state = initialState, action) => {
       };
     }
     case 'LOGOUT': {
-      return {
-        token: '',
-        alertMsg: '',
-        isLogin: false,
-        isLoading: false,
-        isError: false,
-        isSuccess: false,
-      };
+      return initialState;
     }
     case 'CLEAR': {
       return {

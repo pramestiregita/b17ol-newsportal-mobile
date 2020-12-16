@@ -121,13 +121,7 @@ export default (state = initialState, action) => {
       };
     }
     case 'LOGOUT': {
-      return {
-        data: {},
-        isLoading: false,
-        isError: false,
-        isSuccess: false,
-        alertMsg: '',
-      };
+      return initialState;
     }
     case 'CLEAR_PROFILE': {
       return {

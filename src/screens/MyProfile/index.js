@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Text, TouchableOpacity, View} from 'react-native';
@@ -10,22 +10,39 @@ import styled from './style';
 import placeholder from '../../assets/avatar.png';
 import profileAction from '../../redux/actions/profile';
 
+import Modal from '../../components/Modal';
+
 export default function MyProfile({navigation}) {
-  const {data} = useSelector((state) => state.profile);
+  const [loading, setLoading] = useState(false);
+  const {data, isLoading} = useSelector((state) => state.profile);
   const {token} = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const getData = async () => {
-    await dispatch(profileAction.getProfile(token));
+    try {
+      await dispatch(profileAction.getProfile(token));
+    } catch (e) {
+      console.log(e.message);
+    }
   };
 
   useEffect(() => {
     getData();
   }, []);
 
+  const doLogout = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      dispatch({type: 'LOGOUT'});
+    }, 2000);
+  };
+
   return (
     Object.keys(data).length > 0 && (
       <View style={styled.parent}>
+        <Modal visible={isLoading || loading} type="load" />
+
         <View key={data.id} style={styled.profileWrapper}>
           <Thumbnail
             large
@@ -57,7 +74,7 @@ export default function MyProfile({navigation}) {
                 <Icon style={styled.listIcon} name="chevron-right" />
               </Right>
             </ListItem>
-            <ListItem onPress={() => dispatch({type: 'LOGOUT'})} button last>
+            <ListItem onPress={() => doLogout()} button last>
               <Left style={styled.listLeft}>
                 <Text style={[styled.listTitle, styled.logout]}>Logout</Text>
               </Left>

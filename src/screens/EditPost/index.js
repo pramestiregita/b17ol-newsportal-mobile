@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {View, Text, Image, ScrollView} from 'react-native';
@@ -10,7 +11,6 @@ import {API_URL} from '@env';
 
 import styled from './style';
 import myPostAction from '../../redux/actions/myPost';
-import newsAction from '../../redux/actions/news';
 
 import Toast from '../../components/Toast';
 import Modal from '../../components/Modal';
@@ -21,10 +21,8 @@ const newsSchema = Yup.object().shape({
 });
 
 export default function CreatePost({navigation, route}) {
-  const [image, setImage] = useState(null);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [imageSource, setSource] = useState({});
   const {token} = useSelector((state) => state.auth);
   const {isSuccess, isError, isLoading, alertMsg, detail} = useSelector(
     (state) => state.myPost,
@@ -50,14 +48,12 @@ export default function CreatePost({navigation, route}) {
       } else if (response.error) {
         Toast('Please try again!');
       } else {
-        setImage(response.uri);
-        setSource(response);
         const form = new FormData();
 
         form.append('picture', {
-          uri: imageSource.uri,
-          name: imageSource.fileName,
-          type: imageSource.type,
+          uri: response.uri,
+          name: response.fileName,
+          type: response.type,
         });
 
         try {
@@ -131,9 +127,7 @@ export default function CreatePost({navigation, route}) {
         <Formik
           initialValues={{title: data.title, news: data.news}}
           validationSchema={newsSchema}
-          onSubmit={(values) => {
-            submit(values);
-          }}>
+          onSubmit={(values) => submit(values)}>
           {({
             handleChange,
             handleBlur,

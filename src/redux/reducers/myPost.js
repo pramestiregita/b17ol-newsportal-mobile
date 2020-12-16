@@ -116,7 +116,7 @@ export default (state = initialState, action) => {
         ...state,
         isLoading: false,
         isError: false,
-        data: action.payload.data.data,
+        data: [...state.data, ...action.payload.data.data],
         pageInfo: action.payload.data.pageInfo,
       };
     }
@@ -208,15 +208,7 @@ export default (state = initialState, action) => {
       };
     }
     case 'LOGOUT': {
-      return {
-        data: {},
-        detail: {},
-        pageInfo: {},
-        isLoading: false,
-        isError: false,
-        isSuccess: false,
-        alertMsg: '',
-      };
+      return initialState;
     }
     case 'CLEAR_MYPOST': {
       return {
@@ -224,6 +216,7 @@ export default (state = initialState, action) => {
         alertMsg: '',
         isError: false,
         isSuccess: false,
+        isLoading: false,
       };
     }
     default: {

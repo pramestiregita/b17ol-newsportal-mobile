@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {View, TouchableOpacity, FlatList, ToastAndroid} from 'react-native';
+import {View, TouchableOpacity, FlatList} from 'react-native';
 import {Card, Item, Input, Picker} from 'native-base';
 import {Formik} from 'formik';
 import RNBootSplash from 'react-native-bootsplash';
@@ -11,6 +11,7 @@ import styled from './style';
 import newsAction from '../../redux/actions/news';
 
 import List from '../../components/CardNews';
+import Toast from '../../components/Toast';
 
 export default function MyPost({}) {
   const [loading] = useState(false);
@@ -34,11 +35,7 @@ export default function MyPost({}) {
 
   useEffect(() => {
     if (alertMsg !== '') {
-      ToastAndroid.showWithGravity(
-        alertMsg,
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-      );
+      Toast(alertMsg);
       dispatch({type: 'CLEAR'});
     }
   }, [alertMsg]);

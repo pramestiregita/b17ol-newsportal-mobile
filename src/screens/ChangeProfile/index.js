@@ -116,7 +116,6 @@ export default function ChangePassword() {
 
   return (
     <View style={styled.parent}>
-      {console.log(data)}
       <Modal visible={isLoading} type="load" />
       <Modal visible={error} type="error" message={alertMsg} />
       <Modal visible={success} type="success" />

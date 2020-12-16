@@ -1,13 +1,16 @@
-import React, {useEffect} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {View, Text, ScrollView} from 'react-native';
-import {Button, Card, Input, Item, Label, Toast} from 'native-base';
+import {View, Text, ScrollView, Keyboard} from 'react-native';
+import {Button, Card, Input, Item, Label} from 'native-base';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
 import styled from './style';
 import profileAction from '../../redux/actions/profile';
+
+import Modal from '../../components/Modal';
 
 const PasswordSchema = Yup.object().shape({
   oldPassword: Yup.string().required('Please insert your old password'),
@@ -19,42 +22,52 @@ const PasswordSchema = Yup.object().shape({
     .oneOf([Yup.ref('newPassword'), null], "New password doesn't match"),
 });
 
-export default function ChangePassword() {
+export default function ChangePassword({navigation}) {
   const {token} = useSelector((state) => state.auth);
-  const {isSuccess, isError, alertMsg} = useSelector((state) => state.profile);
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const {isLoading, isSuccess, isError, alertMsg} = useSelector(
+    (state) => state.profile,
+  );
+
   const dispatch = useDispatch();
 
   const update = async (values) => {
-    await dispatch(profileAction.changePassword(token, values));
+    try {
+      Keyboard.dismiss();
+      await dispatch(profileAction.changePassword(token, values));
+    } catch (e) {
+      console.log(e.message);
+    }
   };
 
   useEffect(() => {
-    if (isSuccess) {
-      Toast.show({
-        text: alertMsg,
-        duration: 3000,
-        position: 'top',
-        type: 'success',
-        textStyle: {
-          fontWeight: 'bold',
-        },
-      });
-    }
     if (isError) {
-      Toast.show({
-        text: alertMsg,
-        duration: 3000,
-        position: 'top',
-        type: 'danger',
-        textStyle: {
-          fontWeight: 'bold',
-        },
-      });
+      setError(true);
+      setTimeout(() => {
+        setError(false);
+        dispatch(profileAction.clear());
+      }, 3000);
     }
-  }, [isSuccess, alertMsg, isError]);
+  }, [isError]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+        dispatch(profileAction.clear());
+        navigation.navigate('MyProfile');
+      }, 2000);
+    }
+  }, [isSuccess]);
 
   return (
     <View style={styled.parent}>
+      <Modal visible={isLoading} type="load" />
+      <Modal visible={error} type="error" message={alertMsg} />
+      <Modal visible={success} type="success" />
+
       <ScrollView>
         <Formik
           initialValues={{

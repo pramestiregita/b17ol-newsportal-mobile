@@ -1,14 +1,18 @@
-import React, {useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {View, Text, Image, ScrollView} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import {Button, Form, Input, Item, Textarea, Toast} from 'native-base';
+import {Button, Form, Input, Item, Textarea} from 'native-base';
 
 import styled from './style';
 import myPostAction from '../../redux/actions/myPost';
 import newsAction from '../../redux/actions/news';
+
+import Toast from '../../components/Toast';
+import Modal from '../../components/Modal';
 
 const newsSchema = Yup.object().shape({
   title: Yup.string().required('Please insert news title'),
@@ -17,8 +21,13 @@ const newsSchema = Yup.object().shape({
 
 export default function CreatePost({navigation}) {
   const [image, setImage] = useState(null);
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [imageSource, setSource] = useState({});
   const {token} = useSelector((state) => state.auth);
+  const {isLoading, isError, isSuccess, alertMsg} = useSelector(
+    (state) => state.myPost,
+  );
 
   const dispatch = useDispatch();
 
@@ -35,17 +44,10 @@ export default function CreatePost({navigation}) {
     };
 
     ImagePicker.showImagePicker(options, (response) => {
-      console.log({response});
-
       if (response.didCancel) {
-        console.log('User canceled image picker');
-        Toast.show({
-          text: "You didn't select any image",
-          duration: 2000,
-          position: 'top',
-        });
+        Toast('Please select an image');
       } else if (response.error) {
-        console.log('Image picker error: ', response.error);
+        Toast('Please try again later!');
       } else {
         setImage(response.uri);
         setSource(response);
@@ -64,15 +66,45 @@ export default function CreatePost({navigation}) {
     form.append('title', v.title);
     form.append('news', v.news);
 
-    const {value} = await dispatch(myPostAction.create(token, form));
-    if (value.data.success) {
-      await dispatch(newsAction.getAll(token));
-      navigation.navigate('Home');
+    try {
+      const {value} = await dispatch(myPostAction.create(token, form));
+      if (value.data.success) {
+        await dispatch(newsAction.getAll(token));
+        setTimeout(() => {
+          navigation.navigate('Home');
+        }, 2000);
+      }
+    } catch (e) {
+      console.log(e.message);
     }
   };
 
+  useEffect(() => {
+    if (isError) {
+      setError(true);
+      setTimeout(() => {
+        setError(false);
+        dispatch(myPostAction.clear());
+      }, 2000);
+    }
+  }, [isError]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+        dispatch(myPostAction.clear());
+      }, 2000);
+    }
+  }, [isSuccess]);
+
   return (
     <View style={styled.parent}>
+      <Modal visible={isLoading} type="load" />
+      <Modal visible={error} type="error" message={alertMsg} />
+      <Modal visible={success} type="success" />
+
       <ScrollView>
         <View style={styled.imagePicker}>
           <Button onPress={selectImage} style={styled.btn} block rounded>
