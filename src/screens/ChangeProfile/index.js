@@ -127,9 +127,7 @@ export default function ChangePassword() {
               resizeMethod="resize"
               style={styled.image}
               source={
-                data.avatar !== null
-                  ? {uri: API_URL.concat(data.avatar.image)}
-                  : avatar
+                data.avatar ? {uri: API_URL.concat(data.avatar.image)} : avatar
               }
             />
             <Button onPress={selectImage} style={styled.btn} block rounded>
