@@ -76,6 +76,8 @@ export default function Login({navigation}) {
             <View style={styled.inputWrapper} floatingLabel>
               <Text style={styled.label}>Email</Text>
               <TextInput
+                autoCapitalize="none"
+                keyboardType="email-address"
                 style={styled.input}
                 onChangeText={handleChange('email')}
                 onBlur={handleBlur('email')}

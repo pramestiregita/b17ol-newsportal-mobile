@@ -165,6 +165,48 @@ export default (state = initialState, action) => {
         data: action.payload.data.data,
       };
     }
+    case 'EDIT_MY_POST_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    }
+    case 'EDIT_MY_POST_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
+    }
+    case 'EDIT_MY_POST_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        isSuccess: true,
+      };
+    }
+    case 'EDIT_PICT_MY_POST_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    }
+    case 'EDIT_PICT_MY_POST_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+      };
+    }
+    case 'EDIT_PICT_MY_POST_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        isSuccess: true,
+      };
+    }
     case 'LOGOUT': {
       return {
         data: {},
@@ -174,6 +216,14 @@ export default (state = initialState, action) => {
         isError: false,
         isSuccess: false,
         alertMsg: '',
+      };
+    }
+    case 'CLEAR_MYPOST': {
+      return {
+        ...state,
+        alertMsg: '',
+        isError: false,
+        isSuccess: false,
       };
     }
     default: {

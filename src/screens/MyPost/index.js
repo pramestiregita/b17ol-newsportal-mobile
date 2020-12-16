@@ -17,6 +17,7 @@ import {API_URL} from '@env';
 
 import styled from './style';
 import postAction from '../../redux/actions/myPost';
+import newsAction from '../../redux/actions/news';
 
 const BUTTONS = ['Delete', 'Cancel'];
 // const DESTRUCTIVE_INDEX = 0;
@@ -76,13 +77,19 @@ export default function MyPost({navigation}) {
   };
 
   const deletePost = async (index, id) => {
-    // setClicked(index);
-    // console.log(index);
     if (index === 0) {
-      // console.log('deleted');
       await dispatch(postAction.delete(token, id));
     }
     getData();
+  };
+
+  const detail = async (id) => {
+    try {
+      await dispatch(newsAction.getDetail(token, id));
+      navigation.navigate('NewsDetail', {id});
+    } catch (e) {
+      console.log(e.message);
+    }
   };
 
   const edit = async (id) => {
@@ -97,7 +104,7 @@ export default function MyPost({navigation}) {
   const renderItem = ({item}) => {
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('NewsDetail', {id: item.id})}
+        onPress={() => detail(item.id)}
         key={item.id}
         style={styled.cardWrapper}>
         <Card>

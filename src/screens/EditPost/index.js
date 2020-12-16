@@ -13,19 +13,23 @@ import myPostAction from '../../redux/actions/myPost';
 import newsAction from '../../redux/actions/news';
 
 import Toast from '../../components/Toast';
+import Modal from '../../components/Modal';
 
 const newsSchema = Yup.object().shape({
   title: Yup.string().required('Please insert news title'),
   news: Yup.string().required('Content must be filled'),
 });
 
-export default function CreatePost({navigation}) {
+export default function CreatePost({navigation, route}) {
   const [image, setImage] = useState(null);
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [imageSource, setSource] = useState({});
   const {token} = useSelector((state) => state.auth);
-  const {isSuccess, detail} = useSelector((state) => state.myPost);
+  const {isSuccess, isError, isLoading, alertMsg, detail} = useSelector(
+    (state) => state.myPost,
+  );
   const data = detail[0];
-  const form = new FormData();
   const dispatch = useDispatch();
 
   const selectImage = () => {
@@ -40,7 +44,7 @@ export default function CreatePost({navigation}) {
       mediaType: 'photo',
     };
 
-    ImagePicker.showImagePicker(options, (response) => {
+    ImagePicker.showImagePicker(options, async (response) => {
       if (response.didCancel) {
         Toast('No image selected');
       } else if (response.error) {
@@ -48,50 +52,81 @@ export default function CreatePost({navigation}) {
       } else {
         setImage(response.uri);
         setSource(response);
+        const form = new FormData();
+
+        form.append('picture', {
+          uri: imageSource.uri,
+          name: imageSource.fileName,
+          type: imageSource.type,
+        });
+
+        try {
+          const {id} = route.params;
+          const {value} = await dispatch(
+            myPostAction.editPict(token, id, form),
+          );
+          if (value.data.success) {
+            await dispatch(myPostAction.getAll(token));
+            navigation.navigate('MyPost');
+          }
+        } catch (e) {
+          console.log(e.message);
+        }
       }
     });
   };
 
   const submit = async (v) => {
-    if (imageSource) {
-      form.append('picture', {
-        uri: imageSource.uri,
-        name: imageSource.fileName,
-        type: imageSource.type,
-      });
+    try {
+      const {id} = route.params;
+      const {value} = await dispatch(myPostAction.edit(token, id, v));
+      if (value.data.success) {
+        await dispatch(myPostAction.getAll(token));
+        setTimeout(() => {
+          navigation.navigate('MyPost');
+        }, 2000);
+      }
+    } catch (e) {
+      console.log(e.message);
     }
-    form.append('title', v.title);
-    form.append('news', v.news);
-    console.log(form);
-
-    // try {
-    //   const {value} = await dispatch(myPostAction.create(token, form));
-    //   if (value.data.success) {
-    //     await dispatch(newsAction.getAll(token));
-    //     navigation.navigate('Home');
-    //   }
-    // } catch (e) {
-    //   console.log(e.message);
-    // }
   };
+
+  useEffect(() => {
+    if (isError) {
+      setError(true);
+      setTimeout(() => {
+        setError(false);
+        dispatch(myPostAction.clear());
+      }, 2000);
+    }
+  }, [isError]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+        dispatch(myPostAction.clear());
+      }, 2000);
+    }
+  }, [isSuccess]);
 
   return (
     <View style={styled.parent}>
-      {console.log(data)}
+      <Modal visible={isLoading} type="load" />
+      <Modal visible={error} type="error" message={alertMsg} />
+      <Modal visible={success} type="success" />
+
       <ScrollView>
         <View style={styled.imagePicker}>
-          <Button onPress={selectImage} style={styled.btn} block rounded>
-            <Text style={styled.btnText}>Select Image</Text>
-          </Button>
           <Image
-            source={{
-              uri: image
-                ? image
-                : data.picture && API_URL.concat(data.picture.image),
-            }}
+            source={{uri: API_URL.concat(data.picture.image)}}
             style={styled.image}
             resizeMethod="resize"
           />
+          <Button onPress={selectImage} style={styled.btn} block rounded>
+            <Text style={styled.btnText}>Change Image</Text>
+          </Button>
         </View>
         <Formik
           initialValues={{title: data.title, news: data.news}}
@@ -122,7 +157,7 @@ export default function CreatePost({navigation}) {
                 ) : null}
                 <Form style={styled.content}>
                   <Textarea
-                    rowSpan={10}
+                    rowSpan={values.news.length > 100 ? 20 : 10}
                     bordered
                     placeholder="Write a content here"
                     onChangeText={handleChange('news')}
@@ -135,7 +170,7 @@ export default function CreatePost({navigation}) {
                 </Form>
               </View>
               <Button onPress={handleSubmit} style={styled.btn} block rounded>
-                <Text style={styled.btnText}>Write News</Text>
+                <Text style={styled.btnText}>Save Changes</Text>
               </Button>
             </>
           )}

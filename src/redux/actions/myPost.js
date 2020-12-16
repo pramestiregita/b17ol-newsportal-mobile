@@ -1,4 +1,5 @@
 import http from '../../helpers/http';
+import qs from 'qs';
 
 export default {
   getAll: (token) => ({
@@ -29,7 +30,15 @@ export default {
     type: 'CREATE_MY_POST',
     payload: http(token).post('user/post', data),
   }),
-  // edit:(token,data)=>({
-  //   type:
-  // })
+  edit: (token, id, data) => ({
+    type: 'EDIT_MY_POST',
+    payload: http(token).patch(`user/my-post/${id}`, qs.stringify(data)),
+  }),
+  editPict: (token, id, data) => ({
+    type: 'EDIT_PICT_MY_POST',
+    payload: http(token).patch(`user/post/picture/${id}`, data),
+  }),
+  clear: () => ({
+    type: 'CLEAR_MYPOST',
+  }),
 };

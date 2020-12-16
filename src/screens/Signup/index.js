@@ -110,6 +110,8 @@ export default function Login({navigation}) {
               <Text style={styled.label}>Email</Text>
               <TextInput
                 ref={email}
+                autoCapitalize="none"
+                keyboardType="email-address"
                 style={styled.input}
                 onChangeText={handleChange('email')}
                 onBlur={handleBlur('email')}
