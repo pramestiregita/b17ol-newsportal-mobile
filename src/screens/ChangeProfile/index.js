@@ -70,7 +70,7 @@ export default function ChangePassword() {
       } else {
         const form = new FormData();
 
-        form.append('avatar', {
+        form.append('picture', {
           uri: response.uri,
           name: response.fileName,
           type: response.type,
@@ -116,108 +116,113 @@ export default function ChangePassword() {
 
   return (
     <View style={styled.parent}>
+      {console.log(data)}
       <Modal visible={isLoading} type="load" />
       <Modal visible={error} type="error" message={alertMsg} />
       <Modal visible={success} type="success" />
 
-      <ScrollView>
-        <View style={styled.avatar}>
-          <View style={styled.content}>
-            <Image
-              resizeMethod="resize"
-              style={styled.image}
-              source={
-                data.avatar ? {uri: API_URL.concat(data.avatar.image)} : avatar
-              }
-            />
-            <Button onPress={selectImage} style={styled.btn} block rounded>
-              <Text style={styled.btnText}>Change Picture</Text>
-            </Button>
-          </View>
-        </View>
-        <Formik
-          initialValues={{
-            fullName: data.fullName,
-            email: data.email,
-          }}
-          validationSchema={ProfileSchema}
-          onSubmit={(values) => update(values)}>
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-          }) => (
-            <View style={styled.formWrapper}>
-              <Card style={styled.card}>
-                <Item
-                  success={!errors.fullName && touched.fullName}
-                  error={errors.fullName && touched.fullName}
-                  style={styled.inputWrapper}
-                  fixedLabel>
-                  <Label style={styled.label}>Name</Label>
-                  <Input
-                    onChangeText={handleChange('fullName')}
-                    onBlur={handleBlur('fullName')}
-                    value={values.fullName}
-                  />
-                  {touched.fullName ? (
-                    <Icon
-                      color={errors.fullName ? 'red' : 'green'}
-                      name={errors.fullName ? 'times-circle' : 'check-circle'}
-                      size={20}
-                    />
-                  ) : null}
-                </Item>
-                {errors.fullName && touched.fullName ? (
-                  <View style={styled.alertWrapper}>
-                    <Icon
-                      style={styled.alertIcon}
-                      name="exclamation-triangle"
-                    />
-                    <Text style={styled.alert}>{errors.fullName}</Text>
-                  </View>
-                ) : null}
-              </Card>
-              <Card style={styled.card}>
-                <Item
-                  success={!errors.email && touched.email}
-                  error={errors.email && touched.email}
-                  style={styled.inputWrapper}
-                  fixedLabel>
-                  <Label style={styled.label}>Email</Label>
-                  <Input
-                    onChangeText={handleChange('email')}
-                    onBlur={handleBlur('email')}
-                    value={values.email}
-                  />
-                  {touched.email ? (
-                    <Icon
-                      color={errors.email ? 'red' : 'green'}
-                      email={errors.email ? 'times-circle' : 'check-circle'}
-                      size={20}
-                    />
-                  ) : null}
-                </Item>
-                {errors.email && touched.email ? (
-                  <View style={styled.alertWrapper}>
-                    <Icon
-                      style={styled.alertIcon}
-                      email="exclamation-triangle"
-                    />
-                    <Text style={styled.alert}>{errors.email}</Text>
-                  </View>
-                ) : null}
-              </Card>
-              <Button onPress={handleSubmit} style={styled.btn} block rounded>
-                <Text style={styled.btnText}>save</Text>
+      {Object.keys(data).length > 0 ? (
+        <ScrollView>
+          <View style={styled.avatar}>
+            <View style={styled.content}>
+              <Image
+                resizeMethod="resize"
+                style={styled.image}
+                source={
+                  data.avatar
+                    ? {uri: API_URL.concat(data.avatar.image)}
+                    : avatar
+                }
+              />
+              <Button onPress={selectImage} style={styled.btn} block rounded>
+                <Text style={styled.btnText}>Change Picture</Text>
               </Button>
             </View>
-          )}
-        </Formik>
-      </ScrollView>
+          </View>
+          <Formik
+            initialValues={{
+              fullName: data.fullName,
+              email: data.email,
+            }}
+            validationSchema={ProfileSchema}
+            onSubmit={(values) => update(values)}>
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              touched,
+            }) => (
+              <View style={styled.formWrapper}>
+                <Card style={styled.card}>
+                  <Item
+                    success={!errors.fullName && touched.fullName}
+                    error={errors.fullName && touched.fullName}
+                    style={styled.inputWrapper}
+                    fixedLabel>
+                    <Label style={styled.label}>Name</Label>
+                    <Input
+                      onChangeText={handleChange('fullName')}
+                      onBlur={handleBlur('fullName')}
+                      value={values.fullName}
+                    />
+                    {touched.fullName ? (
+                      <Icon
+                        color={errors.fullName ? 'red' : 'green'}
+                        name={errors.fullName ? 'times-circle' : 'check-circle'}
+                        size={20}
+                      />
+                    ) : null}
+                  </Item>
+                  {errors.fullName && touched.fullName ? (
+                    <View style={styled.alertWrapper}>
+                      <Icon
+                        style={styled.alertIcon}
+                        name="exclamation-triangle"
+                      />
+                      <Text style={styled.alert}>{errors.fullName}</Text>
+                    </View>
+                  ) : null}
+                </Card>
+                <Card style={styled.card}>
+                  <Item
+                    success={!errors.email && touched.email}
+                    error={errors.email && touched.email}
+                    style={styled.inputWrapper}
+                    fixedLabel>
+                    <Label style={styled.label}>Email</Label>
+                    <Input
+                      onChangeText={handleChange('email')}
+                      onBlur={handleBlur('email')}
+                      value={values.email}
+                    />
+                    {touched.email ? (
+                      <Icon
+                        color={errors.email ? 'red' : 'green'}
+                        email={errors.email ? 'times-circle' : 'check-circle'}
+                        size={20}
+                      />
+                    ) : null}
+                  </Item>
+                  {errors.email && touched.email ? (
+                    <View style={styled.alertWrapper}>
+                      <Icon
+                        style={styled.alertIcon}
+                        email="exclamation-triangle"
+                      />
+                      <Text style={styled.alert}>{errors.email}</Text>
+                    </View>
+                  ) : null}
+                </Card>
+                <Button onPress={handleSubmit} style={styled.btn} block rounded>
+                  <Text style={styled.btnText}>save</Text>
+                </Button>
+              </View>
+            )}
+          </Formik>
+        </ScrollView>
+      ) : null}
     </View>
   );
 }
